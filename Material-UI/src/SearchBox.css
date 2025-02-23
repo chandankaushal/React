@@ -1,3 +1,6 @@
 .SearchBoxDiv {
   text-align: center;
 }
+.SearchBoxButton {
+  margin-bottom: 25px;
+}
