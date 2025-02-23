@@ -7,17 +7,19 @@ import "./SearchBox.css";
 export default function SearchBox({ updateInfo }) {
   let [city, setCity] = useState("");
   let [error, setError] = useState(false);
-  let API_URL = "http://api.openweathermap.org/geo/1.0/direct";
-  let API_KEY = "50127ef28a9d36f0ab26b7d1781e1a11";
-  let API_URL2 = "https://api.openweathermap.org/data/2.5/weather";
-
   async function ApiCall(city) {
     try {
-      let response = await fetch(`${API_URL}?q=${city}&appid=${API_KEY}`);
+      let response = await fetch(
+        `${import.meta.env.VITE_API_URL}?q=${city}&appid=${
+          import.meta.env.VITE_API_KEY
+        }`
+      );
       let jsonResponse = await response.json();
       let { lat, lon } = jsonResponse[0];
       let res = await fetch(
-        `${API_URL2}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+        `${import.meta.env.VITE_API_URL2}?lat=${lat}&lon=${lon}&appid=${
+          import.meta.env.VITE_API_KEY
+        }&units=metric`
       );
       let json = await res.json();
 
