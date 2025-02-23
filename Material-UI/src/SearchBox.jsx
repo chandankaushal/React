@@ -7,21 +7,27 @@ import "./SearchBox.css";
 export default function SearchBox({ updateInfo }) {
   let [city, setCity] = useState("");
   let [error, setError] = useState(false);
+  let weatherApiUrl = import.meta.env.VITE_WEATHER_API_URL;
+  let weatherApiKey = import.meta.env.VITE_API_KEY;
+  let weatherApiUrl2 = import.meta.env.VITE_API_URL2;
   async function ApiCall(city) {
+    //console.log(`This is calling ${weatherApiUrl2}`);
     try {
       let response = await fetch(
-        `${import.meta.env.VITE_API_URL}?q=${city}&appid=${
-          import.meta.env.VITE_API_KEY
-        }`
+        `${weatherApiUrl}?q=${city}&appid=${weatherApiKey}`
       );
       let jsonResponse = await response.json();
+
       let { lat, lon } = jsonResponse[0];
-      let res = await fetch(
-        `${import.meta.env.VITE_API_URL2}?lat=${lat}&lon=${lon}&appid=${
-          import.meta.env.VITE_API_KEY
-        }&units=metric`
+      console.log(
+        `${weatherApiUrl2}?lat=${lat}&lon=${lon}&appid=${weatherApiKey}&units=metric`
       );
+      let res = await fetch(
+        `${weatherApiUrl2}?lat=${lat}&lon=${lon}&appid=${weatherApiKey}&units=metric`
+      );
+      console.log(res);
       let json = await res.json();
+      console.log(`This is ${json}`);
 
       let imageURL = await GetImageforCity(city);
 

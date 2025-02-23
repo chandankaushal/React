@@ -17,7 +17,6 @@ export default function WeatherApp() {
   };
   return (
     <>
-      <h1>{import.meta.env.VITE_UNSPLASH_APPLICATION_ID}</h1>
       <div style={{ textAlign: "center" }}>
         <h2> Weather App</h2>
         <SearchBox updateInfo={updateInfo}></SearchBox>
