@@ -1,0 +1,26 @@
+.Card {
+  border: 1px solid black;
+  border-radius: 25px;
+  height: 146px;
+  width: 400px;
+  margin-right: 25px;
+}
+ul {
+  list-style-type: none; /* Removes the marker */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  background-color: gold;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border: 1px;
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  margin-right: 25px;
+}
