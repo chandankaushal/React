@@ -6,12 +6,19 @@ import "./SearchBox.css";
 
 export default function SearchBox({ updateInfo }) {
   let [city, setCity] = useState("");
-  let [error, setError] = useState(false);
+  let [error, setError] = useState({flag: false, message: ""});
+
   let weatherApiUrl = import.meta.env.VITE_WEATHER_API_URL;
   let weatherApiKey = import.meta.env.VITE_API_KEY;
   let weatherApiUrl2 = import.meta.env.VITE_API_URL2;
+
+  if (!weatherApiUrl || !weatherApiKey || !weatherApiUrl2) {
+    setError({flag: true, message: "Please provide the API URL and API Key in .env file"});
+    throw new Error("Please Check if you are passing the correct API URL and API Key");
+  }
+
   async function ApiCall(city) {
-    //console.log(`This is calling ${weatherApiUrl2}`);
+   
     try {
       let response = await fetch(
         `${weatherApiUrl}?q=${city}&appid=${weatherApiKey}`
@@ -19,15 +26,13 @@ export default function SearchBox({ updateInfo }) {
       let jsonResponse = await response.json();
 
       let { lat, lon } = jsonResponse[0];
-      console.log(
-        `${weatherApiUrl2}?lat=${lat}&lon=${lon}&appid=${weatherApiKey}&units=metric`
-      );
+
       let res = await fetch(
         `${weatherApiUrl2}?lat=${lat}&lon=${lon}&appid=${weatherApiKey}&units=metric`
       );
-      console.log(res);
+      
       let json = await res.json();
-      console.log(`This is ${json}`);
+    
 
       let imageURL = await GetImageforCity(city);
 
@@ -51,13 +56,17 @@ export default function SearchBox({ updateInfo }) {
     let accessToken = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
     let url = import.meta.env.VITE_APP_UNSPLASH_URL;
     let apiUrl = `${url}?client_id=${accessToken}&query=${city}`;
+    try{  
+      let response = await fetch(apiUrl);
+      let jsonResponse = await response.json();
+      let imageURL = jsonResponse.results[0].urls.small;
+      return imageURL;
+    }
+      catch(err){
+        setError({flag: true, message: "Failed to Fetch Image"});
+      }
+    }
 
-    let response = await fetch(apiUrl);
-    let jsonResponse = await response.json();
-
-    let imageURL = jsonResponse.results[0].urls.small;
-    return imageURL;
-  }
 
   function handleChange(event) {
     setCity(event.target.value);
@@ -70,7 +79,7 @@ export default function SearchBox({ updateInfo }) {
       setCity("");
       updateInfo(newInfo);
     } catch (err) {
-      setError(true);
+      setError({flag: true, message: "Failed to Fetch Weather Information"});
     }
   }
 
@@ -92,9 +101,9 @@ export default function SearchBox({ updateInfo }) {
             <Button variant="contained" type="submit">
               Search
             </Button>
-            {error && (
+            {error.flag == true && (
               <b>
-                <p style={{ color: "red" }}>No such Place exist in our API</p>
+                <p style={{ color: "red" }}>{error.message}</p>
               </b>
             )}
           </div>
